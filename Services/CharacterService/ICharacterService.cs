@@ -7,10 +7,10 @@ namespace RPG.Services.CharacterService
 {
     public interface ICharacterService
     {
-        List<Character> GetAllCharacters();
+        Task<List<Character>> GetAllCharacters();
 
-        Character GetcharacterByid(int id);
+        Task<Character> GetcharacterByid(int id);
 
-        List<Character> AddCharacter(Character newCharacter);
+        Task<List<Character>> AddCharacter(Character newCharacter);
     }
 }
