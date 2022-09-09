@@ -11,8 +11,12 @@ namespace RPG.Controllers
     public class CharacterController:ControllerBase
     {
         private static List<Character> characters = new List<Character>(){
-            new Character(),
-            new Character{Name = "Felix"}
+            new Character{Id=0, Name = "Frodo"},
+            new Character{Id=1, Name = "Felix"},
+            new Character{Id=2, Name = "David"},
+            new Character{Id=3, Name = "Solomon"},
+            new Character{Id=4, Name = "John"}
+
         };
 
 
@@ -21,9 +25,9 @@ namespace RPG.Controllers
             return Ok(characters);
          }
 
-         [HttpGet]
-         public ActionResult<Character> GetSingleCharacter(){
-            return Ok(characters[0]);
+         [HttpGet("{id}")]
+         public ActionResult<Character> GetSingleCharacter( int id){
+            return Ok(characters.FirstOrDefault(c=> c.Id == id));
          }
     }
 }
