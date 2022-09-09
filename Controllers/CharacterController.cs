@@ -29,5 +29,12 @@ namespace RPG.Controllers
          public ActionResult<Character> GetSingleCharacter( int id){
             return Ok(characters.FirstOrDefault(c=> c.Id == id));
          }
+
+        [HttpPost]
+         public ActionResult<List<Character>> AddCharacter(Character newCharacter){
+            characters.Add(newCharacter);
+            return Ok(characters);
+
+         }
     }
 }
