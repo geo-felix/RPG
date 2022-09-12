@@ -17,18 +17,23 @@ namespace RPG.Services.CharacterService
 
         };
 
-        public async Task<List<Character>> GetAllCharacters(){
-            return characters;
+        public async Task<ServiceResponse<List<Character>>> GetAllCharacters(){
+            
+            return new ServiceResponse<List<Character>>{data = characters};
         }
 
-        public async Task<Character> GetcharacterByid(int id){
-
-           return characters.FirstOrDefault(c=> c.Id == id);
+        public async Task<ServiceResponse<Character>> GetcharacterByid(int id){
+           var serviceResponse = new ServiceResponse<Character>();
+           var character = characters.FirstOrDefault(c=> c.Id == id);
+           serviceResponse.data = character;
+           return serviceResponse;
         }
         
-        public async Task<List<Character>> AddCharacter(Character newCharacter){
+        public async Task<ServiceResponse<List<Character>>> AddCharacter(Character newCharacter){
+            var serviceResponse = new ServiceResponse<List<Character>>();
             characters.Add(newCharacter);
-            return characters;
+            serviceResponse.data = characters;
+            return serviceResponse;
         }
     }
 }
