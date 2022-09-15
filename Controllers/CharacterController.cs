@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using RPG.Services.CharacterService;
-using RPG.Dtos
+using RPG.Dtos.Character;
 
 namespace RPG.Controllers
 {
