@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using RPG.Services;
+using RPG.Dtos
 
 namespace RPG.Services.CharacterService
 {
@@ -17,20 +18,20 @@ namespace RPG.Services.CharacterService
 
         };
 
-        public async Task<ServiceResponse<List<Character>>> GetAllCharacters(){
+        public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllCharacters(){
             
-            return new ServiceResponse<List<Character>>{data = characters};
+            return new ServiceResponse<List<GetCharacterDto>>{data = characters};
         }
 
-        public async Task<ServiceResponse<Character>> GetcharacterByid(int id){
-           var serviceResponse = new ServiceResponse<Character>();
+        public async Task<ServiceResponse<GetCharacterDto>> GetcharacterByid(int id){
+           var serviceResponse = new ServiceResponse<GetCharacterDto>();
            var character = characters.FirstOrDefault(c=> c.Id == id);
            serviceResponse.data = character;
            return serviceResponse;
         }
         
-        public async Task<ServiceResponse<List<Character>>> AddCharacter(Character newCharacter){
-            var serviceResponse = new ServiceResponse<List<Character>>();
+        public async Task<ServiceResponse<List<GetCharacterDto>>> AddCharacter(AddCharacterDto newCharacter){
+            var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
             characters.Add(newCharacter);
             serviceResponse.data = characters;
             return serviceResponse;
