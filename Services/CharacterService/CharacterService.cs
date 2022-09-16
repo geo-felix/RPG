@@ -19,10 +19,8 @@ namespace RPG.Services.CharacterService
             new Character{Id=4, Name = "John"}
 
         };
+  
 
-
-       
-       
         //dependecy injection of the automapper
         private readonly IMapper _mapper;
 
@@ -55,6 +53,11 @@ namespace RPG.Services.CharacterService
             characters.Add(character);
             serviceResponse.data = characters.Select(c => _mapper.Map<GetCharacterDto>(c)).ToList();
             return serviceResponse;
+        }
+
+        public Task<ServiceResponse<GetCharacterDto>> UpdateCharacterDto(UpdateCharacterDto updatedCharacterDto)
+        {
+            throw new NotImplementedException();
         }
     }
 }
