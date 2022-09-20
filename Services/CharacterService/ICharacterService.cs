@@ -13,5 +13,6 @@ namespace RPG.Services.CharacterService
         Task<ServiceResponse<GetCharacterDto>> GetcharacterByid(int id);
 
         Task<ServiceResponse<List<GetCharacterDto>>> AddCharacter(AddCharacterDto newCharacter);
+        Task<ServiceResponse<GetCharacterDto>>UpdateCharacterDto(UpdateCharacterDto updatedCharacterDto);
     }
 }
