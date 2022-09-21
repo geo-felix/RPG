@@ -19,22 +19,31 @@ namespace RPG.Controllers
         _characterService = characterService;
       }
 
-        [HttpGet("GetAll")]
-         public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> Get(){
+      [HttpGet("GetAll")]
+      public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> Get(){
 
-            return Ok(await _characterService.GetAllCharacters());
-         }
+         return Ok(await _characterService.GetAllCharacters());
+      }
 
-         [HttpGet("{id}")]
-         public async Task<ActionResult<ServiceResponse<GetCharacterDto>>>GetSingleCharacter( int id){
-            return Ok(await _characterService.GetcharacterByid(id));
-         }
+      [HttpGet("{id}")]
+      public async Task<ActionResult<ServiceResponse<GetCharacterDto>>>GetSingleCharacter( int id){
+         return Ok(await _characterService.GetcharacterByid(id));
+      }
 
-        [HttpPost]
-         public  async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>>AddCharacter(AddCharacterDto newCharacter){
+      [HttpPost]
+      public  async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>>AddCharacter(AddCharacterDto newCharacter){
             
-            return Ok(await _characterService.AddCharacter(newCharacter));
+         return Ok(await _characterService.AddCharacter(newCharacter));
 
+      }
+      [HttpPut]
+      public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> UpdateCharacter(UpdateCharacterDto updatedCharacter){
+         var serviceResponse = (await _characterService.UpdateCharacter(updatedCharacter));
+         if (serviceResponse.Data == null){
+            return NotFound(serviceResponse);
          }
+         return Ok(serviceResponse);
+      }
+        
     }
 }
