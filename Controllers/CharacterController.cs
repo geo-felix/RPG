@@ -44,6 +44,13 @@ namespace RPG.Controllers
          }
          return Ok(serviceResponse);
       }
-        
+      [HttpDelete("{id}")]
+      public async Task<ActionResult> DeleteCharacter(int id){
+         var serviceResponse = (await _characterService.DeleteCharacter(id));
+         if (serviceResponse.Data == null){
+            return NotFound(serviceResponse);
+         }
+         return Ok(serviceResponse);
+      }
     }
 }

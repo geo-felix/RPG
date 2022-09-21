@@ -100,27 +100,20 @@ namespace RPG.Services.CharacterService
             }
             return serviceResponse;
         }
-        // public async Task<ServiceResponse<GetCharacterDto>> UpdateCharacter(UpdateCharacterDto updatedCharacter)
-        // {
-        //     ServiceResponse<GetCharacterDto> serviceResponse = new ServiceResponse<GetCharacterDto>();
-        //     try
-        //     {
-        //         Character character = characters.FirstOrDefault(c => c.Id == updatedCharacter.Id);
-        //         character.Name = updatedCharacter.Name;
-        //         character.Class = updatedCharacter.Class;
-        //         character.Defense = updatedCharacter.Defense;
-        //         character.HitPoints = updatedCharacter.HitPoints;
-        //         character.Intelligence = updatedCharacter.Intelligence;
-        //         character.Strength = updatedCharacter.Strength;
-
-        //         serviceResponse.Data = _mapper.Map<GetCharacterDto>(character);
-        //     }
-        //     catch(Exception ex)
-        //     {
-        //         serviceResponse.Success = false;
-        //         serviceResponse.Message = ex.Message;
-        //     }
-        //     return serviceResponse;
-        // }
+        public async Task<ServiceResponse<List<GetCharacterDto>>> DeleteCharacter(int id)
+        {
+          var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
+          try
+          {
+            Character character = characters.FirstOrDefault(c => c.Id == id);
+            characters.Remove(character);
+            serviceResponse.Data = (characters.Select(c => _mapper.Map<GetCharacterDto>(c))).ToList();
+          }
+          catch (Exception ex){
+            serviceResponse.Success = false;
+            serviceResponse.Message = "No such Characer";
+          }
+          return serviceResponse;
+        }
     }
 }
