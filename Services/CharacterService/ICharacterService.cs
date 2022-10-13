@@ -13,7 +13,12 @@ namespace RPG.Services.CharacterService
         Task<ServiceResponse<GetCharacterDto>> GetcharacterByid(int id);
 
         Task<ServiceResponse<List<GetCharacterDto>>> AddCharacter(AddCharacterDto newCharacter);
-        Task<ServiceResponse<GetCharacterDto>>UpdateCharacter(UpdateCharacterDto updatedCharacter);
-        Task<ServiceResponse<List<GetCharacterDto>>>DeleteCharacter(int id);
+        
+        // add character by stored procedure
+        Task<ServiceResponse<List<Character>>> AddCharacter(Character newCharacter);
+
+        Task<ServiceResponse<GetCharacterDto>> UpdateCharacter(UpdateCharacterDto updatedCharacter);
+        
+        Task<ServiceResponse<List<GetCharacterDto>>> DeleteCharacter(int id);
     }
 }

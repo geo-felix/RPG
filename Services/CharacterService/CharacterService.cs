@@ -5,12 +5,20 @@ using System.Threading.Tasks;
 using RPG.Services;
 using RPG.Dtos.Character;
 using AutoMapper;
+using System Data;
+using System.Data.SqlClient;
+using System.Configuration;
+
 
 
 namespace RPG.Services.CharacterService
 {
+
     public class CharacterService : ICharacterService
     {
+        SqlConnection con = new SqlConnection(ConfigurationManager.ConnectionStrings["Myconnection"].ConnectionString);
+        List<Character> characters = new List<Character>();
+
         private static List<Character> characters = new List<Character>(){
             new Character{Id=0, Name = "Frodo"},
             new Character{Id=1, Name = "Felix"},
@@ -20,7 +28,6 @@ namespace RPG.Services.CharacterService
 
         };
   
-
         //dependecy injection of the automapper
         private readonly IMapper _mapper;
 
@@ -42,15 +49,16 @@ namespace RPG.Services.CharacterService
             // return serviceResponse;
         }
 
-        public async Task<ServiceResponse<GetCharacterDto>> GetcharacterByid(int id){
+        public async Task<ServiceResponse<GetCharacterDto>> GetcharacterByid(int id)
+        {
            var serviceResponse = new ServiceResponse<GetCharacterDto>();
            var character = characters.FirstOrDefault(c=> c.Id == id);
            serviceResponse.Data = _mapper.Map<GetCharacterDto>(character);
            return serviceResponse;
-      
-        // ServiceResponse<GetCharacterDto> serviceResponse = new ServiceResponse<GetCharacterDto>();
-        //     serviceResponse.Data = _mapper.Map<GetCharacterDto>(characters.FirstOrDefault(c => c.Id == id));
-        //     return serviceResponse;
+        
+            // ServiceResponse<GetCharacterDto> serviceResponse = new ServiceResponse<GetCharacterDto>();
+            //     serviceResponse.Data = _mapper.Map<GetCharacterDto>(characters.FirstOrDefault(c => c.Id == id));
+            //     return serviceResponse;
         }
         
         // public async Task<ServiceResponse<List<GetCharacterDto>>> AddCharacter(AddCharacterDto newCharacter)
@@ -68,14 +76,81 @@ namespace RPG.Services.CharacterService
         // //     serviceResponse.Data = (characters.Select(c => _mapper.Map<GetCharacterDto>(c))).ToList();
         // //     return serviceResponse;
         // }
-        public async Task<ServiceResponse<List<GetCharacterDto>>> AddCharacter(AddCharacterDto newCharacter)
+        // public async Task<ServiceResponse<List<GetCharacterDto>>> AddCharacter(AddCharacterDto newCharacter)
+        // {
+        //     var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
+        //     Character character = _mapper.Map<Character>(newCharacter);
+        //     character.Id = characters.Max(c=> c.Id) + 1 ;
+        //     characters.Add(character);
+        //     serviceResponse.Data = characters.Select(c => _mapper.Map<GetCharacterDto>(c)).ToList();
+        //     return serviceResponse;
+
+    
+        // }
+
+        //A post by the stored procedure
+
+        public async Task<List<Character>> AddCharacter(Character character)
         {
-            var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
-            Character character = _mapper.Map<Character>(newCharacter);
-            character.Id = characters.Max(c=> c.Id) + 1 ;
-            characters.Add(character);
-            serviceResponse.Data = characters.Select(c => _mapper.Map<GetCharacterDto>(c)).ToList();
-            return serviceResponse;
+            // public string msg = "";
+            
+            try
+            {
+                SqlCommand command = new SqlCommand("Addcharacter",con);
+                command.CommandType = CommandType.StoredProcedure;
+                
+
+                command.Parameters.AddWithValue("@Name", character.Name);
+                command.Parameters.AddWithValue("@HitPoints", character.HitPoints);
+                command.Parameters.AddWithValue("@Strength", character.Strength);
+                command.Parameters.AddWithValue("@Defense", character.Defense);
+                command.Parameters.AddWithValue("@Intelligence", character.Intelligence);
+                command.Parameters.AddWithValue("@Rpgtype", character.Rpgtype);
+
+                con.Open();
+                int i = command.ExecuteNonQuery();
+                con.Close();
+
+                // if(i > 0){
+                //     msg "Data has been added successfully"
+                // }else
+                //     msg "Error"
+                // }
+            }
+            catch (Exception ex)
+            {
+                
+                // return msg;
+            }
+                // SqlCommand command = new SqlCommand("Addcharacter",con);
+                // command.CommandType = CommandType.StoredProcedure;
+                
+
+                // command.Parameters.AddWithValue("@Name", character.Name);
+                // command.Parameters.AddWithValue("@HitPoints", character.HitPoints);
+                // command.Parameters.AddWithValue("@Strength", character.Strength);
+                // command.Parameters.AddWithValue("@Defense", character.Defense);
+                // command.Parameters.AddWithValue("@Intelligence", character.Intelligence);
+                // command.Parameters.AddWithValue("@Rpgtype", character.Rpgtype);
+
+                // con.Open();
+                // int i = command.ExecuteNonQuery();
+                // con.Close();
+
+                // if(i > 0){
+                //     msg "Data has been added successfully"
+                // }else
+                //     msg "Error"
+                // }
+            
+            // return msg;
+            // var serviceResponse = new ServiceResponse<List<Character>>();
+            // Character character = _mapper.Map<Character>(newCharacter);
+            // character.Id = characters.Max(c=> c.Id) + 1 ;
+            // characters.Add(character);
+            // serviceResponse.Data = characters.Select(c => _mapper.Map<GetCharacterDto>(c)).ToList();
+            // return serviceResponse;
+
     
         }
 
@@ -102,18 +177,18 @@ namespace RPG.Services.CharacterService
         }
         public async Task<ServiceResponse<List<GetCharacterDto>>> DeleteCharacter(int id)
         {
-          var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
-          try
-          {
-            Character character = characters.FirstOrDefault(c => c.Id == id);
-            characters.Remove(character);
-            serviceResponse.Data = (characters.Select(c => _mapper.Map<GetCharacterDto>(c))).ToList();
-          }
-          catch (Exception ex){
-            serviceResponse.Success = false;
-            serviceResponse.Message = "No such Characer";
-          }
-          return serviceResponse;
+            var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
+            try
+            {
+                Character character = characters.FirstOrDefault(c => c.Id == id);
+                characters.Remove(character);
+                serviceResponse.Data = (characters.Select(c => _mapper.Map<GetCharacterDto>(c))).ToList();
+            }
+            catch (Exception ex){
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
+            return serviceResponse;
         }
     }
 }

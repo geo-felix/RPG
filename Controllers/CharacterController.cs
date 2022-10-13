@@ -8,10 +8,10 @@ using RPG.Dtos.Character;
 
 namespace RPG.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class CharacterController:ControllerBase
-    {
+   [ApiController]
+   [Route("api/[controller]")]
+   public class CharacterController:ControllerBase
+   {
       private readonly ICharacterService _characterService;
 
       public CharacterController(ICharacterService characterService)
@@ -30,8 +30,15 @@ namespace RPG.Controllers
          return Ok(await _characterService.GetcharacterByid(id));
       }
 
+      // [HttpPost]
+      // public  async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>>AddCharacter(AddCharacterDto newCharacter){
+            
+      //    return Ok(await _characterService.AddCharacter(newCharacter));
+
+      // }
+      // add character by stored procedure
       [HttpPost]
-      public  async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>>AddCharacter(AddCharacterDto newCharacter){
+      public  async Task<ActionResult<ServiceResponse<List<Character>>>>AddCharacter(Character newCharacter){
             
          return Ok(await _characterService.AddCharacter(newCharacter));
 
@@ -52,5 +59,5 @@ namespace RPG.Controllers
          }
          return Ok(serviceResponse);
       }
-    }
+   }
 }
